@@ -13,7 +13,10 @@ def fracsum(wavea, waveb, flux, c1, c2, mean=False, check=False):
   
     pixwidth = waveb-wavea  
     fracused = np.zeros_like(flux)
-  
+
+    #eliminate nans
+    flux_noNan = np.nan_to_num(flux)
+    
     # make sure wide enough
     if (wavea[0]>=c1) or (waveb[-1]<=c2):
       return None
@@ -36,17 +39,17 @@ def fracsum(wavea, waveb, flux, c1, c2, mean=False, check=False):
       fracused[uppind] = (c2-wavea[uppind])/pixwidth[uppind]
 
     if check:
-      plt.scatter(wavea, flux)
-      plt.scatter(waveb, flux)
+      plt.scatter(wavea, flux_noNan)
+      plt.scatter(waveb, flux_noNan)
       plt.plot([c1,c1],[0,10])
       plt.plot([c2,c2],[0,10])
-      print(np.arange(0,len(flux)))
-      print(fracused)
-      print(flux)
+      #print(np.arange(0,len(flux)))
+      #print(fracused)
+      #print(flux)
     
-    integral = np.sum(flux*fracused*pixwidth)
+    integral = np.sum(flux_noNan*fracused*pixwidth)
     if mean:
-      print(flux, integral, np.sum(fracused*pixwidth), fracused, pixwidth)
+      #print(flux_noNan, integral, np.sum(fracused*pixwidth), fracused, pixwidth)
   
       return integral/np.sum(fracused*pixwidth)
     else:
